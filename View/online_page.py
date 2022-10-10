@@ -11,7 +11,7 @@ class Albums:
 
     def create_box_albums(self):
         result = webparse.WebParse().parse()
-        root = Builder.load_file('View\Scroll_y.kv')
+        root = Builder.load_file('View\Scroll_Y.kv')
         for r in result:
             content = Builder.load_file('View\AlbumsBox.kv')
             content.ids.img.source = r.img
