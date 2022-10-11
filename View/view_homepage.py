@@ -12,7 +12,7 @@ class HomeApp(MDApp):
         super().__init__()
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "DeepPurple"
-        self.path_kv: str = "View\HomePage.kv"
+        self.path_kv: str = "View/Templates/HomePage.kv"
         self.img_source: str = None
         self.screen: kivy.uix.screenmanager.ScreenManager = None
 
