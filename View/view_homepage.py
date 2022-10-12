@@ -17,12 +17,13 @@ class HomeApp(MDApp):
         self.screen: kivy.uix.screenmanager.ScreenManager = None
 
     def action_content(self, instance_navigation_rail, instance_navigation_rail_item) -> None:
+        # modify the interface so that it does not hang when selecting content
         match instance_navigation_rail_item.text:
             case "Online":
                 search = MDTextField(icon_left="magnify", mode="round", _icon_right_color="white")
                 self.root.ids.content.clear_widgets()
                 self.root.ids.content.add_widget(search)
-                online_page.Albums(self.root.ids.content).create_box_albums()
+                online_page.Albums(self.root.ids.content).create_box_genre()
             case _:
                 self.root.ids.content.clear_widgets()
 
