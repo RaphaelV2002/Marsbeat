@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS GENRES (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        url TEXT NOT NULL,
+        img BLOB NOT NULL
+)
