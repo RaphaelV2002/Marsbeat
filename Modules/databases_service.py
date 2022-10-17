@@ -2,8 +2,8 @@ import sqlite3
 
 
 class Config:
-    def __init__(self):
-        con = sqlite3.connect("user_config.db")
+    def __init__(self, path):
+        con = sqlite3.connect(path)
         self.cur = con.cursor()
 
     def create_tables(self):
