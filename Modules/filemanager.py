@@ -3,8 +3,8 @@
 import os
 import yaml
 
-from Modules import databases_service
-from View import online_page
+from Modules import databases_service, webparse
+from View import selected_genres
 
 
 from kivymd.uix.filemanager import MDFileManager
@@ -40,7 +40,7 @@ class Selected_directory:
             if yaml.safe_load(conf)['path_db'] != "None":
                 self.file_manager.close()
                 self.box_content.clear_widgets()
-                online_page.Albums(self.box_content).create_box_genre()
+                selected_genres.Genres(self.box_content).create_box_selected()
             else:
                 self.file_manager.close()
                 toast("File not found")

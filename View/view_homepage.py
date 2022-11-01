@@ -27,8 +27,8 @@ class HomeApp(MDApp):
         match instance_navigation_rail_item.text:
             case "Online":
                 self.root.ids.content.clear_widgets()
-                if self.path_db:
-                    selected_genres.Selected_Path(self.root.ids.content).create_button()
+                # if self.path_db is None:
+                selected_genres.Selected_Path(self.root.ids.content).create_button()
                 # if databases_service.Config().cur.execute("SELECT COUNT(*) FROM  GENRES").fetchone()[0] == 0:
                 #     selected_genres.Genres(self.root.ids.content).create_box_selected()
                 # else:

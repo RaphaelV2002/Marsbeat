@@ -11,6 +11,7 @@ class Album:
     def __post_init__(self):
         # add an insert to the table
         # or delete this file altogether
+        self.url = self.url.replace('https://ru.hitmotop.com//', 'https://ru.hitmotop.com/')
         if requests.get(self.url).status_code == 200:
             if self.img:
                 self.img = "https:" + self.img.replace("background-image: url('", "").replace("')", "")

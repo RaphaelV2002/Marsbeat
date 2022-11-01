@@ -1,38 +1,45 @@
+from threading import Thread
+
 import requests
 from bs4 import BeautifulSoup
 
 from Modules.parsed_data import Album
+from multiprocessing.pool import ThreadPool
 
 
 class WebParse:
     def __init__(self):
         self.url: str = "https://ru.hitmotop.com/"
+        self.data: list = []
 
     def parse_albums(self) -> list:
         request = requests.get(self.url + 'albums')
-        data: list = []
         soup = BeautifulSoup(request.content, 'html.parser')
-        j: int = 0
-        for i in soup.find_all('li', class_='album-item'):
-            j += 1
-            data.append(Album(title=' '.join(i.find('span', class_='album-title').text.replace('\n', '').split()),
-                              img=i.find('span', class_='album-image').get('style'),
-                              url=self.url + i.find('a').get('href')))
-            if j == 5:
-                break
-        return data
+        obs = soup.find_all('li', class_='album-item')
+        pool = ThreadPool(processes=len(obs))
+        for i in obs:
+            pool.apply_async(self._in_data_classes, i)
+        while len(self.data) != len(obs):
+            print('sleep')
+        print(self.data)
+
+    def _in_data_classes(self, obj):
+        self.data.append(Album(title=' '.join(obj.find('span', class_='album-title').text.replace('\n', '').split()),
+                               img=obj.find('span', class_='album-image').get('style'),
+                               url=self.url + obj.find('a').get('href')))
+        return self.data
 
     def parse_genre(self) -> list:
         request = requests.get(self.url + 'genres')
-        data: list = []
         soup = BeautifulSoup(request.content, 'html.parser')
-        for i in soup.find_all('li', class_='album-item'):
-            data.append(Album(title=i.find('span', class_='album-title').text,
-                              img=i.find('span', class_='album-image').get('style'),
-                              url="https://ru.hitmotop.com" + i.find('a', class_='album-link').get('href')
-                              )
-                        )
-        return data
+        obs = soup.find_all('li', class_='album-item')
+        pool = ThreadPool(processes=len(obs))
+        for i in obs:
+            pool.apply_async(self._in_data_classes, (i,))
+        while len(self.data) != len(obs):
+            if len(self.data) == len(obs):
+                pool.terminate()
+                return self.data
 
     def parse_tracks(self) -> list:
         ...
