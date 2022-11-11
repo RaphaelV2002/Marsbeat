@@ -1,10 +1,12 @@
+import threading
+
 from Modules import webparse, filemanager
 
 from kivy.core.window import Window
 from kivy.uix.gridlayout import GridLayout
+from kivymd.uix.fitimage.fitimage import FitImage
 
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.fitimage.fitimage import FitImage
 from kivymd.uix.label import MDLabel, MDIcon
 from kivymd.uix.button import MDRoundFlatIconButton
 from kivy.uix.scrollview import ScrollView
@@ -14,28 +16,42 @@ class Genres:
     def __init__(self, box_content):
         self.content_block = box_content
 
-    def create_box_selected(self):
+    def create_box_selected(self) -> bool:
         # self.content_block.clear_widgets()
+        cols: int = ((Window.size[0] - 80) // 64)
+        spacing: float = (((Window.size[0] - 80) % 64) / 100)
         list_genre: list = None
         while list_genre is None:
-            list_genre = webparse.WebParse().parse_genre()
-        genres = GridLayout(cols=4, spacing=15, size_hint=(.1, None))
-        scroll = ScrollView(size_hint=(1, 1))
-        print(list_genre)
+            list_genre: list = webparse.WebParse().parse_genre()
+        scroll = ScrollView(size_hint=(1, 1), do_scroll_y=True, do_scroll_x=False)
+        genres = GridLayout(cols=cols, spacing=spacing, size_hint=(None, None), width=500)
+        genres.bind(minimum_height=genres.setter('height'))
         for _list in list_genre:
             if _list.url is not None:
                 content = MDBoxLayout(orientation="vertical",
                                       adaptive_width=True,
                                       adaptive_height=True)
                 if not _list.img:
-                    content.add_widget(MDIcon(icon="image-off-outline", pos_hint={'center_x': .5, 'center_y': .5}))
+                    icon = MDIcon(icon="image-off-outline", pos_hint={'center_x': .5, 'center_y': .5})
+                    icon.id = _list.title
+                    icon.bind(on_press=lambda x: print(x.id))
+                    content.add_widget(icon)
                 else:
-                    content.add_widget(FitImage(source=_list.img))
-                content.add_widget(MDLabel(text=_list.title, halign="center", theme_text_color="Primary"))
+                    icon = FitImage(source=_list.img)
+                    icon.id = _list.title
+                    icon.bind(on_press=lambda x: print(x.id))
+                    content.add_widget(icon)
+                # content.add_widget(name_genres)
                 genres.add_widget(content)
+                print(self.content_block.text, icon.id)
+                # genres.add_widget(MDFlatButton(text=_list.title, theme_text_color="Custom"))
         scroll.add_widget(genres)
-        self.content_block.add_widget(MDLabel(text='Selected please favorite genres', halign="center", theme_text_color="Primary"))
+        self.content_block.add_widget(
+            MDLabel(text='Selected please favorite genres', halign="center", theme_text_color="Primary",
+                    size_hint=(1, .1)))
         self.content_block.add_widget(scroll)
+
+        return True
 
 
 class Selected_Path:

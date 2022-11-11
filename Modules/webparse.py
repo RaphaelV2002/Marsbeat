@@ -1,7 +1,8 @@
 from threading import Thread
+from typing import Any
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, ResultSet
 
 from Modules.parsed_data import Album
 from multiprocessing.pool import ThreadPool
@@ -28,6 +29,12 @@ class WebParse:
                                img=obj.find('span', class_='album-image').get('style'),
                                url=self.url + obj.find('a').get('href')))
         return self.data
+
+    def get_num_values(self, category: str) -> int:
+        request = requests.get(self.url + category)
+        soup = BeautifulSoup(request.content, 'html.parser')
+        obs: ResultSet[Any] = soup.find_all('li', class_='album-item')
+        return len(obs)
 
     def parse_genre(self) -> list:
         request = requests.get(self.url + 'genres')

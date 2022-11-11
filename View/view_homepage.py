@@ -9,6 +9,10 @@ from kivy.lang import Builder
 
 from kivymd.app import MDApp
 
+import time
+
+start = time.time()
+
 
 class HomeApp(MDApp):
     def __init__(self):
@@ -21,23 +25,17 @@ class HomeApp(MDApp):
         self.img_source: str = None
         self.screen: kivy.uix.screenmanager.ScreenManager = None
         self.path_db = yaml_conf['path_db']
+        self.loads = False
 
     def action_content(self, instance_navigation_rail, instance_navigation_rail_item) -> None:
-        # modify the interface so that it does not hang when selecting content
         match instance_navigation_rail_item.text:
             case "Online":
-                self.root.ids.content.clear_widgets()
-                # if self.path_db is None:
-                selected_genres.Selected_Path(self.root.ids.content).create_button()
-                # if databases_service.Config().cur.execute("SELECT COUNT(*) FROM  GENRES").fetchone()[0] == 0:
-                #     selected_genres.Genres(self.root.ids.content).create_box_selected()
-                # else:
-                #     search = MDTextField(icon_left="magnify", mode="round", _icon_right_color="white")
-                #     self.root.ids.content.clear_widgets()
-                #     self.root.ids.content.add_widget(search)
-                #     online_page.Albums(self.root.ids.content).create_box_genre()
+                if self.loads is False:
+                    self.root.ids.content.clear_widgets()
+                    self.loads = selected_genres.Genres(self.root.ids.content).create_box_selected()
             case _:
                 self.root.ids.content.clear_widgets()
+                self.loads = False
 
     def build(self):
         self.img_source: str = 'https://ru.hitmotop.com/covers/a/95e/323/371376.jpg'
