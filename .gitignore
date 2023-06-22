@@ -8,6 +8,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+
 .Python
 env/
 build/
@@ -58,3 +59,7 @@ docs/_build/
 # PyBuilder
 target/
 
+# VS stuff
+.vs/
+Marsbeat.pyproj
+Marsbeat.pyproj.user
