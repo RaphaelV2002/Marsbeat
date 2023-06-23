@@ -8,6 +8,7 @@ from kivymd.uix.fitimage.fitimage import FitImage
 
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel, MDIcon
+from kivy.uix.label import Label
 from kivymd.uix.button import MDRoundFlatIconButton
 from kivy.uix.scrollview import ScrollView
 
@@ -31,19 +32,19 @@ class Genres:
                 content = MDBoxLayout(orientation="vertical",
                                       adaptive_width=True,
                                       adaptive_height=True)
-                if not _list.img:
-                    icon = MDIcon(icon="image-off-outline", pos_hint={'center_x': .5, 'center_y': .5})
-                    icon.id = _list.title
-                    icon.bind(on_press=lambda x: print(x.id))
-                    content.add_widget(icon)
-                else:
-                    icon = FitImage(source=_list.img)
-                    icon.id = _list.title
-                    icon.bind(on_press=lambda x: print(x.id))
-                    content.add_widget(icon)
-                # content.add_widget(name_genres)
+                #if not _list.img:
+                #    icon = MDIcon(icon="image-off-outline", pos_hint={'center_x': .5, 'center_y': .5})
+                #    icon.id = _list.title
+                #    icon.bind(on_press=lambda x: print(x.id))
+                #    content.add_widget(icon)
+                #else:
+                #    icon = FitImage(source=_list.img)
+                #    icon.id = _list.title
+                #    icon.bind(on_press=lambda x: print(x.id))
+                #    content.add_widget(icon)
+                content.add_widget(Label(text=_list.title))
                 genres.add_widget(content)
-                print(self.content_block.text, icon.id)
+                #print(self.content_block.text)
                 # genres.add_widget(MDFlatButton(text=_list.title, theme_text_color="Custom"))
         scroll.add_widget(genres)
         self.content_block.add_widget(

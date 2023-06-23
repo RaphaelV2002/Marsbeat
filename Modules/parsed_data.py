@@ -24,6 +24,15 @@ class Album:
         else:
             self.url = None
 
+@dataclass
+class Genre:
+    title: str = None
+    url: str = None
+
+    def __post_init__(self):
+        # add an insert to the table
+        # or delete this file altogether
+        self.url = self.url.replace('https://ru.hitmotop.com//', 'https://ru.hitmotop.com/')
 
 @dataclass
 class Track:
