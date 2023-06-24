@@ -9,7 +9,7 @@ from kivymd.uix.fitimage.fitimage import FitImage
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel, MDIcon
 from kivy.uix.label import Label
-from kivymd.uix.button import MDRoundFlatIconButton
+from kivymd.uix.button import MDRoundFlatIconButton, MDFlatButton
 from kivy.uix.scrollview import ScrollView
 
 
@@ -42,10 +42,10 @@ class Genres:
                 #    icon.id = _list.title
                 #    icon.bind(on_press=lambda x: print(x.id))
                 #    content.add_widget(icon)
-                content.add_widget(Label(text=_list.title))
+                #content.add_widget(Label(text=_list.title))
                 genres.add_widget(content)
                 #print(self.content_block.text)
-                # genres.add_widget(MDFlatButton(text=_list.title, theme_text_color="Custom"))
+                genres.add_widget(MDFlatButton(text=_list.title, theme_text_color="Primary", md_bg_color="blue"))
         scroll.add_widget(genres)
         self.content_block.add_widget(
             MDLabel(text='Selected please favorite genres', halign="center", theme_text_color="Primary",

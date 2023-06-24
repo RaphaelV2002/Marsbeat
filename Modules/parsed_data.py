@@ -28,6 +28,7 @@ class Album:
 class Genre:
     title: str = None
     url: str = None
+    img: str = None
 
     def __post_init__(self):
         # add an insert to the table

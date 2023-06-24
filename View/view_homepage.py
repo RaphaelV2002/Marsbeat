@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
+import random
 import yaml
-
+import os
+os.environ['KIVY_AUDIO'] = 'ffpyplayer' 
 from View import selected_genres
-
+from kivymd.uix.button import MDRoundFlatIconButton
 import kivy
 from kivy.lang import Builder
-
+from kivy.core.audio import SoundLoader
 from kivymd.app import MDApp
-
+import datetime
 import time
 
 start = time.time()
@@ -32,15 +34,39 @@ class HomeApp(MDApp):
             case "Online":
                 if self.loads is False:
                     self.root.ids.content.clear_widgets()
-                    self.loads = selected_genres.Genres(self.root.ids.content).create_box_selected()
+                    #self.loads = selected_genres.Genres(self.root.ids.content).create_box_selected()
             case _:
                 self.root.ids.content.clear_widgets()
                 self.loads = False
 
     def build(self):
-        self.img_source: str = 'https://ru.hitmotop.com/covers/a/95e/323/371376.jpg'
+        self.pos_sound=0
+        #self.img_source: str = 'https://ru.hitmotop.com/covers/a/95e/323/371376.jpg'
+        self.music_dir ="Music/"
+        self.music_files = os.listdir(self.music_dir)
+        self.track_list = [x for x in self.music_files if x.endswith(('mp3'))]
+        self.track_count = len(self.track_list)
+        self.track_title = self.track_list[random.randrange(0,self.track_count)]
+        self.sound = SoundLoader.load('{}/{}'.format(self.music_dir,self.track_title)) 
+
         self.screen = Builder.load_file(self.path_kv)
         return Builder.load_file(self.path_kv)
+
+    def play_pause(self,obj)-> None:
+        if self.sound.state == "stop":
+            self.root.ids.play_pause.icon = "pause"
+            self.root.ids.slider.max = self.sound.length
+            self.root.ids.track_title.text = self.track_title.replace(".mp3","")
+            self.root.ids.length_track.text = time.strftime("%M:%S", time.gmtime(self.sound.length))
+            self.sound.play()
+            time.sleep(0.0000000001)
+            print("Play:" ,self.pos_sound)
+            self.sound.seek(self.pos_sound)
+        else:
+            self.root.ids.play_pause.icon = "play"
+            self.pos_sound = self.sound.get_pos()
+            print("Pause:" ,self.pos_sound)
+            self.sound.stop()
 
 
 def run_view() -> None:

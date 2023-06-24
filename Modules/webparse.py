@@ -24,8 +24,8 @@ class WebParse:
         print(self.data)
 
     def _in_data_album(self, obj):
-        self.data.append(Album(title=' '.join(obj.find('span', class_='album-title').text.replace('\n', '').split()),
-                               img=obj.find('span', class_='album-image').get('style'),
+        self.data.append(Album(title=' '.join(obj.find('span', class_='title cover_title').text.replace('\n', '').split()),
+                               img=obj.find('img', class_='cover_img').get('style'),
                                url=self.url + obj.find('a').get('href')))
         return self.data
     
@@ -43,9 +43,7 @@ class WebParse:
     def parse_genre(self) -> list:
         request = requests.get(self.url + 'genres')
         soup = BeautifulSoup(request.content, 'html.parser')
-        #print(soup)
         obs = soup.find_all('li', class_='widget_itemLink')
-        print(obs)
         pool = ThreadPool(processes=len(obs))
         for i in obs:
             pool.apply_async(self._in_data_genre, (i,))
