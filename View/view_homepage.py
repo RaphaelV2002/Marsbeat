@@ -4,7 +4,7 @@ import random
 import yaml
 import os
 os.environ['KIVY_AUDIO'] = 'ffpyplayer' 
-from View import selected_genres
+from View import selected_genres, playlists
 import kivy
 from kivy.lang import Builder
 from kivy.core.audio import SoundLoader
@@ -33,6 +33,10 @@ class HomeApp(MDApp):
                 if self.loads is False:
                     self.root.ids.content.clear_widgets()
                     #self.loads = selected_genres.Genres(self.root.ids.content).create_box_selected()
+            case "Playlists":
+                if self.loads is False:
+                    self.root.ids.content.clear_widgets()
+                    self.loads = playlists.Playlists(self.root.ids.content).create_box_selected(callback=self.select)
             case _:
                 self.root.ids.content.clear_widgets()
                 self.loads = False
@@ -69,6 +73,15 @@ class HomeApp(MDApp):
         self.sound = SoundLoader.load('{}/{}'.format(self.music_dir,self.track_title))
         self.change()
         self.sound.play()
+    
+    def select(self,track_title)-> None:
+        self.sound.stop()
+        self.track_title = track_title
+        print(self.number_track)
+        self.sound = SoundLoader.load('{}/{}'.format(self.music_dir,self.track_title))
+        self.change()
+        self.sound.play()
+    
     def change(self):
         if self.sound.state == "stop":
             self.root.ids.play_pause.icon = "pause"

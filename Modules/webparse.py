@@ -2,7 +2,7 @@ from threading import Thread
 from typing import Any
 import requests
 from bs4 import BeautifulSoup, ResultSet
-
+import os
 from Modules.parsed_data import Album, Genre
 from multiprocessing.pool import ThreadPool
 
@@ -52,5 +52,9 @@ class WebParse:
                 pool.terminate()
                 return self.data
 
-    def parse_tracks(self) -> list:
-        ...
+    def parse_track(self) -> list:
+        self.music_dir ="Music/"
+        self.music_files = os.listdir(self.music_dir)
+        self.track_list = [x for x in self.music_files if x.endswith(('mp3'))]
+        self.data=self.track_list
+        return self.data
