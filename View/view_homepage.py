@@ -70,6 +70,8 @@ class HomeApp(MDApp):
         self.change()
         self.sound.play()
     def change(self):
+        if self.sound.state == "stop":
+            self.root.ids.play_pause.icon = "pause"
         self.root.ids.slider.max = self.sound.length
         self.root.ids.track_title.text = self.track_title.replace(".mp3","")
         self.root.ids.length_track.text = time.strftime("%M:%S", time.gmtime(self.sound.length))
@@ -77,8 +79,8 @@ class HomeApp(MDApp):
     def play_pause(self,obj)-> None:
         if self.sound.state == "stop":
             self.root.ids.play_pause.icon = "pause"
-            self.change()
             self.sound.play()
+            self.change()
             time.sleep(0.0000000001)
             print("Play:" ,self.pos_sound)
             self.sound.seek(self.pos_sound)
