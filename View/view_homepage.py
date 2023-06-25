@@ -5,14 +5,12 @@ import yaml
 import os
 os.environ['KIVY_AUDIO'] = 'ffpyplayer' 
 from View import selected_genres
-from kivymd.uix.button import MDRoundFlatIconButton
 import kivy
 from kivy.lang import Builder
 from kivy.core.audio import SoundLoader
 from kivymd.app import MDApp
 import datetime
 import time
-
 start = time.time()
 
 
@@ -46,18 +44,40 @@ class HomeApp(MDApp):
         self.music_files = os.listdir(self.music_dir)
         self.track_list = [x for x in self.music_files if x.endswith(('mp3'))]
         self.track_count = len(self.track_list)
-        self.track_title = self.track_list[random.randrange(0,self.track_count)]
-        self.sound = SoundLoader.load('{}/{}'.format(self.music_dir,self.track_title)) 
-
+        self.number_track = 0
+        self.track_title = self.track_list[self.number_track]    
+        self.sound = SoundLoader.load('{}/{}'.format(self.music_dir,self.track_title))
         self.screen = Builder.load_file(self.path_kv)
         return Builder.load_file(self.path_kv)
-
+    def back(self,obj)-> None:
+        self.sound.stop()
+        #self.sound.unload()
+        if self.number_track!=0:
+            self.number_track=self.number_track-1
+            self.track_title = self.track_list[self.number_track]
+        print(self.number_track)
+        self.sound = SoundLoader.load('{}/{}'.format(self.music_dir,self.track_title))
+        self.change()
+        self.sound.play()
+    def skip(self,obj)-> None:
+        self.sound.stop()
+        #self.sound.unload()
+        if self.number_track!=self.track_count-1:
+            self.number_track=self.number_track+1
+            self.track_title = self.track_list[self.number_track]
+        print(self.number_track)
+        self.sound = SoundLoader.load('{}/{}'.format(self.music_dir,self.track_title))
+        self.change()
+        self.sound.play()
+    def change(self):
+        self.root.ids.slider.max = self.sound.length
+        self.root.ids.track_title.text = self.track_title.replace(".mp3","")
+        self.root.ids.length_track.text = time.strftime("%M:%S", time.gmtime(self.sound.length))
+            
     def play_pause(self,obj)-> None:
         if self.sound.state == "stop":
             self.root.ids.play_pause.icon = "pause"
-            self.root.ids.slider.max = self.sound.length
-            self.root.ids.track_title.text = self.track_title.replace(".mp3","")
-            self.root.ids.length_track.text = time.strftime("%M:%S", time.gmtime(self.sound.length))
+            self.change()
             self.sound.play()
             time.sleep(0.0000000001)
             print("Play:" ,self.pos_sound)

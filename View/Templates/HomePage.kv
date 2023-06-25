@@ -44,16 +44,20 @@ ScreenManager:
             orientation: "horizontal"
             md_bg_color: 0, 0, 0, 1
             MDIconButton:
+                id: back
                 icon: "skip-previous-outline"
                 theme_icon_color: "Custom"
+                on_release: app.back(*args)
             MDIconButton:
                 id: play_pause
                 icon: "play"
                 theme_icon_color: "Custom"
                 on_release: app.play_pause(*args)
             MDIconButton:
+                id: skip
                 icon: "skip-next-outline"
                 theme_icon_color: "Custom"
+                on_release: app.skip(*args)
             FitImage:
                 source: app.img_source
                 size_hint: .2, 1
